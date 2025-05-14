@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker System</title>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="firebase-config.js"></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="./style.css">
+    
+    <!-- Add Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <script>
+        const auth = firebase.auth();
+        auth.onAuthStateChanged(user => {
+          if (!user) {
+            window.location.href = 'login.html';
+          }
+        });
+      </script>
+    <div class="main">
+        <h1>Expense Tracking System</h1>
+        <div class="text-right mb-3">
+            <button class="btn btn-danger" onclick="logout()">Logout</button>
+        </div>
+          
+        <div class="budget-container row">
+            <div class="add-container col-4">
+                <div class="add-budget-container">
+                    <h4>Add Budget</h4>
+                    <form>
+                        <div class="form-group">
+                            <label for="budget">Budget:</label>
+                            <input class="form-control" type="text" id="budget">
+                        </div>
+                        <button class="btn btn-primary form-control">Add Budget</button>
+                    </form>
+                </div>
+                <div class="add-expense-container mt-4">
+                    <h4>Add Expense</h4>
+                    <form>
+                        <div class="form-group">
+                            <label for="expense">Expense Title:</label>
+                            <input class="form-control" type="text" id="expense" oninput="suggestCategory()">
+                        </div>
+                        <p id="suggested-category" class="text-muted ml-1"></p>
+                        <div class="form-group">
+                            <label for="amount">Amount:</label>
+                            <input class="form-control" type="text" id="amount">
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Date:</label>
+                            <input class="form-control" type="date" id="date">
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Category:</label>
+                            <input class="form-control" type="text" id="category" list="category-options">
+                            <datalist id="category-options">
+                                <option value="Food">
+                                <option value="Bills">
+                                <option value="Travel">
+                                <option value="Shopping">
+                                <option value="Miscellaneous">
+                            </datalist>
+                        </div>
+                        <button class="btn btn-primary form-control">Add Expense</button>
+                    </form>
+                </div>
+                <button class="btn btn-danger form-control mt-2" onclick="resetAll()">Reset All</button>
+                <button class="btn btn-success form-control mt-2" onclick="exportToCSV()">Export to CSV</button>
+            </div>
+
+            <div class="display-container">
+                <div class="heading row" style="display: flex; justify-content:space-around;">
+                    <div class="alert alert-success" role="alert">
+                        Total Budget: <span id="totalBudget">0</span>
+                    </div>
+                    <div class="alert alert-success" role="alert">
+                        Total Expenses: <span id="totalExpenses">0</span>
+                    </div>
+                    <div class="alert alert-success" role="alert">
+                        Budget Left: <span id="budgetLeft">0</span>
+                    </div>
+                </div>
+                <hr>
+                <div class="table-container table-responsive">
+                    <h5>Expense History:</h5>
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">Expense Name</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody id="expenseTableBody">
+                          <!-- Expenses go here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="chart-container col-6">
+                <h5>Expenses Breakdown</h5>
+                <div class="charts-wrapper">
+                    <div class="chart-box">
+                      <h5>Expenses Distribution (Pie)</h5>
+                      <canvas id="expensesChart"></canvas>
+                    </div>
+                    <div class="chart-box">
+                      <h5>Expenses Overview (Bar)</h5>
+                      <canvas id="barChart"></canvas>
+                    </div>
+                  </div>
+                  
+                  
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script JS -->
+    <script src="./script.js"></script>
+    <script>
+        function logout() {
+          firebase.auth().signOut().then(() => {
+            window.location.href = 'login.html';
+          }).catch((error) => {
+            console.error('Logout error:', error);
+          });
+        }
+      </script>
+      
+</body>
+</html>

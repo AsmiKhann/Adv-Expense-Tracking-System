@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Expense Tracker</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #5e00c3, #2f92fc);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .auth-container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    width: 850px;
+    }
+
+    .auth-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    }
+
+    .illustration img {
+    width: 320px;
+    padding: 20px;
+    }
+
+    .form-section {
+    width: 450px;
+    }
+
+
+    .tabs {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 25px;
+    }
+
+    .tabs button {
+      background: none;
+      border: none;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 10px;
+      color: #555;
+      border-bottom: 2px solid transparent;
+      transition: 0.3s;
+    }
+
+    .tabs button.active {
+      color: #2575fc;
+      border-bottom: 2px solid #2575fc;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    button.submit-btn {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      background-color: #28d728;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button.submit-btn:hover {
+      background-color: #24c024;
+    }
+
+    .form {
+      display: none;
+    }
+
+    .form.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+    
+    <div class="tabs">
+        <div class="auth-container">
+            <div class="auth-content">
+              <div class="illustration">
+                <img src="login-illustration.svg" alt="Login Illustration">
+              </div>
+          
+              <div class="form-section">
+                <div class="tabs">
+                  <button id="loginTab" class="active">Login</button>
+                  <button id="registerTab">Register</button>
+                </div>
+          
+                <div id="loginForm" class="form active">
+                  <input type="email" id="loginEmail" placeholder="Email" required>
+                  <input type="password" id="loginPassword" placeholder="Password" required>
+                  <button class="submit-btn" id="loginBtn">Login</button>
+                </div>
+          
+                <div id="registerForm" class="form">
+                  <input type="email" id="registerEmail" placeholder="Email" required>
+                  <input type="password" id="registerPassword" placeholder="Password" required>
+                  <button class="submit-btn" id="registerBtn">Register</button>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+          
+
+  <script>
+    const auth = firebase.auth();
+
+    // Tabs
+    const loginTab = document.getElementById('loginTab');
+    const registerTab = document.getElementById('registerTab');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+
+    loginTab.onclick = () => {
+      loginTab.classList.add('active');
+      registerTab.classList.remove('active');
+      loginForm.classList.add('active');
+      registerForm.classList.remove('active');
+    };
+
+    registerTab.onclick = () => {
+      registerTab.classList.add('active');
+      loginTab.classList.remove('active');
+      registerForm.classList.add('active');
+      loginForm.classList.remove('active');
+    };
+
+    // Auth Actions
+    document.getElementById('loginBtn').onclick = () => {
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      auth.signInWithEmailAndPassword(email, password)
+        .then(() => window.location.href = 'index.html')
+        .catch(err => alert(err.message));
+    };
+
+    document.getElementById('registerBtn').onclick = () => {
+      const email = document.getElementById('registerEmail').value;
+      const password = document.getElementById('registerPassword').value;
+      auth.createUserWithEmailAndPassword(email, password)
+        .then(() => window.location.href = 'index.html')
+        .catch(err => alert(err.message));
+    };
+  </script>
+</body>
+</html>
