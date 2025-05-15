@@ -1,3 +1,8 @@
+// Import Firebase modules
+import { initializeApp } from "firebase/app";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+
 // firebase-config.js
 const firebaseConfig = {
     apiKey: "AIzaSyDtRKABGSdhQQaGMPHTdvMHVR__mEZOwzc",
@@ -10,5 +15,6 @@ const firebaseConfig = {
   };
   
   // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
